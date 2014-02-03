@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<teamdata>
+ <team>
+  <teamID>46131</teamID>
+  <name>San Franchis</name>
+  <countryID>35</countryID>
+  <regionID>692</regionID>
+  <dateCreated>2012-08-08 00:40</dateCreated>
+  <rank>2322.66</rank>
+  <national>0</national>
+  <colShirtKeep>-1</colShirtKeep>
+  <colTrausKeep>-1</colTrausKeep>
+  <colShirt>14730839</colShirt>
+  <colTraus>1115090</colTraus>
+  <colShirt2>7296422</colShirt2>
+  <colTraus2>1115090</colTraus2>
+  <arenaName>San Franchis Arena</arenaName>
+  <money>4329910</money>
+  <trainingType>8</trainingType>
+  <trainingFormation>2</trainingFormation>
+  <fanclubCount>1034</fanclubCount>
+  <fanclubMood>1</fanclubMood>
+  <juniorsMax>17</juniorsMax>
+ </team>
+ <arena>
+  <stand>
+   <location>1</location>
+   <type>2</type>
+   <size>2000</size>
+   <isRoof>0</isRoof>
+   <constructionDays>0</constructionDays>
+  </stand>
+  <stand>
+   <location>3</location>
+   <type>1</type>
+   <size>500</size>
+   <isRoof>0</isRoof>
+   <constructionDays>0</constructionDays>
+  </stand>
+  <stand>
+   <location>4</location>
+   <type>3</type>
+   <size>500</size>
+   <isRoof>0</isRoof>
+   <constructionDays>0</constructionDays>
+  </stand>
+ </arena>
+ <user>
+  <userID>1457547</userID>
+  <login>mattmad</login>
+ </user>
+</teamdata>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<transfers teamID="46131">
+ <transfer>
+  <ID>5366005</ID>
+  <sellerTeamID>46131</sellerTeamID>
+  <buyerTeamID>70474</buyerTeamID>
+  <sellerTeamName>San Franchis</sellerTeamName>
+  <buyerTeamName>Gașca Nebună</buyerTeamName>
+  <playerID>28731167</playerID>
+  <date>2013-12-15 17:35:23</date>
+  <price>600000</price>
+  <playerValue>229000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5320549</ID>
+  <sellerTeamID>114378</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>sintrim-tim</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>27809075</playerID>
+  <date>2013-11-03 19:26:31</date>
+  <price>168000</price>
+  <playerValue>637000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5233254</ID>
+  <sellerTeamID>51548</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>FC Rasiaki II</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>11527571</playerID>
+  <date>2013-08-16 20:29:57</date>
+  <price>12000</price>
+  <playerValue>1269000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5222505</ID>
+  <sellerTeamID>101856</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>jeezy fc</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>9557592</playerID>
+  <date>2013-08-07 19:06:07</date>
+  <price>125</price>
+  <playerValue>941000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5217028</ID>
+  <sellerTeamID>3329</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>DENAR-2</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>7617838</playerID>
+  <date>2013-08-02 20:56:21</date>
+  <price>125</price>
+  <playerValue>1451000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5200614</ID>
+  <sellerTeamID>46131</sellerTeamID>
+  <buyerTeamID>88261</buyerTeamID>
+  <sellerTeamName>San Franchis</sellerTeamName>
+  <buyerTeamName>SOKKER FOREVER FC</buyerTeamName>
+  <playerID>28296050</playerID>
+  <date>2013-07-15 18:38:42</date>
+  <price>96000</price>
+  <playerValue>598000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5190751</ID>
+  <sellerTeamID>72205</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>T-REX POWER</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>28185885</playerID>
+  <date>2013-07-05 12:14:43</date>
+  <price>10125</price>
+  <playerValue>91000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5190670</ID>
+  <sellerTeamID>51360</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>FC Nietykalni</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>28260012</playerID>
+  <date>2013-07-05 02:36:54</date>
+  <price>1</price>
+  <playerValue>49000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5185826</ID>
+  <sellerTeamID>46131</sellerTeamID>
+  <buyerTeamID>23985</buyerTeamID>
+  <sellerTeamName>San Franchis</sellerTeamName>
+  <buyerTeamName>™ ØS FØDAS DØ MØnstro ™</buyerTeamName>
+  <playerID>27734105</playerID>
+  <date>2013-06-30 06:10:53</date>
+  <price>5000</price>
+  <playerValue>348000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5174169</ID>
+  <sellerTeamID>93856</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>FK Ksawerówka</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>28205926</playerID>
+  <date>2013-06-18 20:00:11</date>
+  <price>5125</price>
+  <playerValue>173000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5109084</ID>
+  <sellerTeamID>73199</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>DrinkTeam</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>28043917</playerID>
+  <date>2013-04-29 14:49:54</date>
+  <price>5008</price>
+  <playerValue>130000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5086054</ID>
+  <sellerTeamID>46131</sellerTeamID>
+  <buyerTeamID>90483</buyerTeamID>
+  <sellerTeamName>San Franchis</sellerTeamName>
+  <buyerTeamName>EL CID</buyerTeamName>
+  <playerID>27157032</playerID>
+  <date>2013-04-10 03:56:34</date>
+  <price>5000</price>
+  <playerValue>457000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5073895</ID>
+  <sellerTeamID>27180</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>Green Berry F.C.</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>27913210</playerID>
+  <date>2013-03-30 15:13:27</date>
+  <price>5005</price>
+  <playerValue>672000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>5044215</ID>
+  <sellerTeamID>88810</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>Marin Futebol Clube</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>27734105</playerID>
+  <date>2013-03-04 21:21:19</date>
+  <price>107500</price>
+  <playerValue>311000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>4920910</ID>
+  <sellerTeamID>78556</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>Batera FC</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>7778373</playerID>
+  <date>2012-12-13 16:52:47</date>
+  <price>125</price>
+  <playerValue>804000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>4920707</ID>
+  <sellerTeamID>61037</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>PRAHOVA PLOIESTI</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>4765565</playerID>
+  <date>2012-12-13 11:23:16</date>
+  <price>17000</price>
+  <playerValue>1038000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>4912407</ID>
+  <sellerTeamID>30334</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>``U``CRAIOVA</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>5688730</playerID>
+  <date>2012-12-06 14:42:54</date>
+  <price>21000</price>
+  <playerValue>1062000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>4912365</ID>
+  <sellerTeamID>94579</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>Szalone Planty</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>8376538</playerID>
+  <date>2012-12-06 13:30:20</date>
+  <price>125</price>
+  <playerValue>463000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>4909863</ID>
+  <sellerTeamID>87415</sellerTeamID>
+  <buyerTeamID>46131</buyerTeamID>
+  <sellerTeamName>FC Livry-Gargan</sellerTeamName>
+  <buyerTeamName>San Franchis</buyerTeamName>
+  <playerID>27157032</playerID>
+  <date>2012-12-04 12:43:05</date>
+  <price>125</price>
+  <playerValue>348000</playerValue>
+ </transfer>
+ <transfer>
+  <ID>4784816</ID>
+  <sellerTeamID>46131</sellerTeamID>
+  <buyerTeamID>29176</buyerTeamID>
+  <sellerTeamName>San Franchis</sellerTeamName>
+  <buyerTeamName>Aynuritis sk</buyerTeamName>
+  <playerID>26335227</playerID>
+  <date>2012-09-12 13:13:14</date>
+  <price>6000</price>
+  <playerValue>201000</playerValue>
+ </transfer>
+</transfers>
