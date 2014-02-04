@@ -15,4 +15,4 @@ define("dns", "mysql:dbname=test;host=127.0.0.1");
 define("username", "root");
 define("password", "root");
 
-define("enckeycode", "some key here");
+define("enckeycode", "paso.maksjg~snjiuv½69087b");

@@ -4,8 +4,8 @@ require_once 'objects/user/usuario.php';
 
 $usuario = 'mathias';
 $contrasena = 'mathias';
-$uSokker = '';
-$pSokker = '';
+$uSokker = 'mattmad';
+$pSokker = 'mamis22po';
 $confirmaCredenciales = 1;
 
 $usr = new Usuario();
