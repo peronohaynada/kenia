@@ -16,3 +16,5 @@ define("username", "root");
 define("password", "root");
 
 define("enckeycode", "some key here");
+
+define("WARNING_LOG", "/sokker/sokker/errors/warnings.log");//fix the path in case it doesn't log

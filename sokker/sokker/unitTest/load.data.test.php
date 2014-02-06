@@ -9,7 +9,11 @@ try {
 	if ($logueado == 1) {
 		$usr->loadSokkerData();
 		$tmp = $usr->getSokkerData();
-		var_dump($tmp);
+		$juniors = $tmp->getJuniors();
+		foreach ($juniors as $junior) {
+			var_dump($junior);
+			echo "<br><br>";
+		}
 	}
 }
 catch (Exception $e) {
