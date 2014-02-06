@@ -3,11 +3,13 @@
 // nombre_usuario varchar(64) not null,
 // contrasena_usuario varchar(256) not null,
 // confirmacion_credenciales_sokker tinyint(1) default 0
+
 require_once 'xUsuarioSokkerTeam.php';
 require_once 'util/db.util.php';
 require_once 'util/enc.util.php';
 require_once 'util/context.class.php';
 require_once 'util/VDSokker.php';
+
 
 class Usuario {
 	private $usuarioId;

@@ -9,7 +9,7 @@
 require_once 'errors/errors.control.php';
 
 Logger::logWarning("Starting the Login Test execution");
-//include_once 'unitTest/login.test.php';
+include_once 'unitTest/login.test.php';
 
 Logger::logWarning("Starting with Data Load test");
 include_once 'unitTest/load.data.test.php';

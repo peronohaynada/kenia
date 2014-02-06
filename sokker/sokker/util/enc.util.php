@@ -1,5 +1,7 @@
 <?php
 
+require_once 'constant.definition.php';
+
 class Encrypt {
 
 	public static function enc($toEncrypt) {
@@ -14,10 +16,10 @@ class Encrypt {
 		return Encrypt::agregarLargo($encode, $largo);
 	}
 	
-	public static function dec($toDecrypt, $key) {
+	public static function dec($toDecrypt) {
 		$limpio = Encrypt::obtenerLargo($toDecrypt);
 		$decode = base64_decode($limpio[1]);
-		$decoded = mcrypt_decrypt(MCRYPT_3DES, Encrypt::getHashedKey($key), $decode, MCRYPT_MODE_ECB);
+		$decoded = mcrypt_decrypt(MCRYPT_3DES, Encrypt::getHashedKey(enckeycode), $decode, MCRYPT_MODE_ECB);
 		return Encrypt::limpiar($decoded, $limpio[0]);
 	}
 	

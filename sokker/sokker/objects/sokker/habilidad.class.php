@@ -82,7 +82,7 @@ class Habilidad {
 			$stmt->execute();
 			
 			$this->progreso = array ();
-			return $stmt->fetch(PDO::FETCH_ASSOC);
+			return $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		catch (PDOException $e) {
 			throw new Exception("Unable to retrieve HABILIDAD and SEMANAS: habilidad.class line 78");

@@ -2,10 +2,9 @@
 // location: unitTest
 require_once '../util/enc.util.php';
 
-$key = "k3y de te571n@";
 $data = "hola mundo!";
 
-$encode = Encrypt::enc($data, $key);
+$encode = Encrypt::enc($data);
 echo $encode."<br>";
-$decode = Encrypt::dec($encode, $key);
+$decode = Encrypt::dec($encode);
 echo $decode."<br>".strlen($decode)."<br>";

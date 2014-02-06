@@ -110,7 +110,7 @@ class Junior {
 			$stmt->bindParam(":sokker_team_id", $xustId);
 			$stmt->execute();
 			
-			return $stmt->fetch(PDO::FETCH_ASSOC);
+			return $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		catch (PDOException $e) {
 			throw new Exception("Unable to load juniors at xust line 96");
@@ -123,11 +123,11 @@ class Junior {
 			$h->setJuniorId($this->id);
 			
 			$this->progreso = array ();
-			while ($row = $h->loadSemanas()) {
+			foreach ($h->loadSemanas() as $row) {
 				$tmpHabilidad = new Habilidad();
 				$tmpHabilidad->setHabilidad($row ['habilidad']);
 				$tmpHabilidad->setSemanas($row ['semanas']);
-				$this->progreso [] = &$tmpHabilidad;
+				$this->progreso [] = $tmpHabilidad;
 			}
 			unset($h);
 		}

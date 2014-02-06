@@ -21,7 +21,8 @@ class XUsuarioSokkerTeam {
 	public function loadData($usuarioId) {
 		try {
 			$this->id = $this->getId($usuarioId);
-			$this->juniors [] = $this->loadJuniors();
+			Logger::logWarning("Loading ".$usuarioId);
+			$this->loadJuniors();
 		}
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
@@ -79,32 +80,32 @@ class XUsuarioSokkerTeam {
 
 	private function loadJuniors() {
 		try {
-			$juniors = array ();
-			while ($row = Junior::loadJuniors($this->id)) {
+			$this->juniors = array ();
+			foreach (Junior::loadJuniors($this->id) as $row) {
 				
+				Logger::logWarning("Loading ".$row ['id']." name: ".$row ['nombre']." lastname: ".$row ['apellido']);
+
 				$junior = new Junior();
 				$junior->setId($row ['id']);
 				$junior->setJuniorId($row ['junior_id']);
-				$junior->setNombre($row ['nombre']);
-				$junior->setApellido($row ['apellido']);
-				$junior->setEdad($row ['edad']);
+				$junior->setNombre(Encrypt::dec($row ['nombre']));
+				$junior->setApellido(Encrypt::dec($row ['apellido']));
+				$junior->setEdad(Encrypt::dec($row ['edad']));
 				$junior->setAltura($row ['altura']);
 				$junior->setPeso($row ['peso']);
 				$junior->setIMC($row ['imc']);
 				$junior->setFormacion($row ['formacion']);
-				//$junior->loadProgreso();
+				$junior->loadProgreso();
 				
-				$juniors [] = &$junior;
+				$this->juniors [] = $junior;
 			}
-			
-			return $juniors;
 		}
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
 	}
 
-	public static function baneado($usuarioId) {
+	public static function isBanned($usuarioId) {
 		try {
 			$pdo = DBUtil::getConexion();
 			$stmt = $pdo->prepare("update x_usuario_sokker_team set baneado = baneado + 1 where usuario_id=:usuario_id");
@@ -125,5 +126,9 @@ class XUsuarioSokkerTeam {
 
 	public function setPSokker($pSokker) {
 		$this->pSokker = $pSokker;
+	}
+	
+	public function getJuniors() {
+		return $this->juniors;
 	}
 }
