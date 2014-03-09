@@ -3,13 +3,13 @@
 // nombre_usuario varchar(64) not null,
 // contrasena_usuario varchar(256) not null,
 // confirmacion_credenciales_sokker tinyint(1) default 0
-
 require_once 'xUsuarioSokkerTeam.php';
 require_once 'util/db.util.php';
 require_once 'util/enc.util.php';
 require_once 'util/context.class.php';
 require_once 'util/VDSokker.php';
-
+require_once 'errors/login.exception.php';
+require_once 'errors/register.exception.php';
 
 class Usuario {
 	private $usuarioId;
@@ -22,8 +22,7 @@ class Usuario {
 		try {
 			$existe = $this->exists($usuario);
 			if (! $existe) {
-				$vds = new VDSokker();
-				$sokkerId = $vds->validarCredenciales($uSokker, $pSokker);
+				$sokkerId = VDSokker::loginToSokker($uSokker, $pSokker);
 				if ($sokkerId != "") {
 					
 					// Registro del usuario
@@ -33,24 +32,27 @@ class Usuario {
 						$xUsuarioSokkerTeam = new XUsuarioSokkerTeam();
 						$xUsuarioSokkerTeam->setUSokker($uSokker);
 						$xUsuarioSokkerTeam->setPSokker($pSokker);
-						$xustId = $xUsuarioSokkerTeam->guardarCredenciales($sokkerId, $this->usuarioId, $confirmaCredenciales);
+						$xUsuarioSokkerTeamId = $xUsuarioSokkerTeam->guardarCredenciales($sokkerId, $this->usuarioId, $confirmaCredenciales);
 						// Descarga de datos de Sokker
-						$vds->descargaXML($sokkerId, $xustId);
-						/*if (! $vds->getContextError()) {
+						VDSokker::descargaXML($sokkerId, $xUsuarioSokkerTeamId);
+						if (! VDSokker::getContextError()) {
 							// Carga de datos
 							$this->loadSokkerData();
 						}
 						else {
-							$exito = false;
-						}*/
+							throw new RegisterException("Conection failure between sokker and us, please try again later.");
+						}
 					}
 					else {
-						$exito = false;
+						throw new RegisterException("Unable to store user in database.");
 					}
+				}
+				else {
+					throw new RegisterException(VDSokker::getContextErrorMessage());
 				}
 			}
 			else {
-				$exito = false;
+				throw new RegisterException("User Exists.");
 			}
 		}
 		catch (Exception $e) {
@@ -59,26 +61,23 @@ class Usuario {
 		return $exito;
 	}
 
-	public function logueo($usuario, $contrasena) {
-		try {
-			$pdo = DBUtil::getConexion();
-			$stmt = $pdo->prepare("SELECT usuario_id FROM usuario WHERE nombre_usuario=:nombre_usuario AND contrasena_usuario=:contrasena_usuario");
-			
-			$stmt->bindParam(":nombre_usuario", $usuario);
-			$stmt->bindParam(":contrasena_usuario", Encrypt::hashContrasena($contrasena));
-			$stmt->execute();
-			
-			$this->usuarioId = $stmt->fetchColumn();
-			
-			return (bool) $this->usuarioId;
+	public function login($usuario, $contrasena) {
+		$this->getUserId($usuario, $contrasena);
+		if ($this->usuarioId != 0) {
+			$this->sokkerData = new XUsuarioSokkerTeam();
+			$sokkerId = $this->sokkerData->getCredentials($this->usuarioId, $this->confirmacionCredenciales);
 		}
-		catch (PDOException $e) {
-			throw new Exception("problems on log in: usuario line 69");
+		else {
+			throw new LoginException("Username or password invalid.");
 		}
 	}
 
 	public function getUsuarioId() {
 		return $this->usuarioId;
+	}
+	
+	public function setUsuarioId($usuarioId) {
+		$this->usuarioId = $usuarioId;
 	}
 
 	public function getConfirmacionCredenciales() {
@@ -95,15 +94,20 @@ class Usuario {
 		}
 	}
 
+	public function updateDataFromSokker() {
+		Logger::logWarning("Usuario->updateDataFromSokker() ".$this->sokkerData->getUSokker() . ", " . $this->sokkerData->getPSokker());
+		$sokkerId = VDSokker::loginToSokker($this->sokkerData->getUSokker(), $this->sokkerData->getPSokker());
+		$dbId = $this->sokkerData->getId($this->usuarioId);
+		Logger::logWarning("$sokkerId + $dbId");
+		VDSokker::descargaXML($sokkerId, $dbId);
+	}
+
 	private function exists($usuario) {
+		$query = "SELECT COUNT(1) FROM usuario WHERE nombre_usuario=:nombre_usuario";
+		$params = array ();
+		$params [":nombre_usuario"] = $usuario;
 		try {
-			$pdo = DBUtil::getConexion();
-			$stmt = $pdo->prepare("SELECT COUNT(1) FROM usuario WHERE nombre_usuario=:nombre_usuario");
-			
-			$stmt->bindParam(":nombre_usuario", $usuario);
-			$stmt->execute();
-			
-			return $stmt->fetchColumn() == 1;
+			return DBUtil::select($query, $params) == 1;
 		}
 		catch (PDOException $e) {
 			throw new Exception("Not sure if user is already registered! u102");
@@ -111,22 +115,18 @@ class Usuario {
 	}
 
 	private function insert($usuario, $contrasena, $confirmaCredenciales) {
-		$pdo = DBUtil::getConexion();
+		$params = array ();
 		$lastId;
 		
+		$params [":nombre_usuario"] = $usuario;
+		$params [":contrasena_usuario"] = Encrypt::hashContrasena($contrasena);
+		$params [":confirmacion_credenciales_sokker"] = $confirmaCredenciales;
+		$query = "INSERT INTO usuario (nombre_usuario, contrasena_usuario, confirmacion_credenciales_sokker) VALUES (:nombre_usuario, :contrasena_usuario, :confirmacion_credenciales_sokker)";
+		
 		try {
-			$stmt = $pdo->prepare("INSERT INTO usuario (nombre_usuario, contrasena_usuario, confirmacion_credenciales_sokker) VALUES (:nombre_usuario, :contrasena_usuario, :confirmacion_credenciales_sokker)");
-			
-			$stmt->bindParam(":nombre_usuario", $usuario);
-			$stmt->bindParam(":contrasena_usuario", Encrypt::hashContrasena($contrasena));
-			$stmt->bindParam(":confirmacion_credenciales_sokker", $confirmaCredenciales);
-			$pdo->beginTransaction();
-			$stmt->execute();
-			$lastId = $pdo->lastInsertId();
-			$pdo->commit();
+			$lastId = DBUtil::insert($query, $params);
 		}
 		catch (PDOException $e) {
-			$pdo->rollback();
 			$lastId = - 1;
 			throw new Exception("unexpected error when saving: u124");
 		}
@@ -135,5 +135,23 @@ class Usuario {
 
 	public function getSokkerData() {
 		return $this->sokkerData;
+	}
+
+	private function getUserId($usuario, $contrasena) {
+		$params = array ();
+		
+		$params [":nombre_usuario"] = $usuario;
+		$params [":contrasena_usuario"] = Encrypt::hashContrasena($contrasena);
+		
+		$query = "SELECT usuario_id, confirmacion_credenciales_sokker FROM usuario WHERE nombre_usuario=:nombre_usuario AND contrasena_usuario=:contrasena_usuario";
+		$result = DBUtil::select($query, $params, PDO::FETCH_ASSOC);
+		
+		foreach ($result as $row) {
+			$this->usuarioId = $row ["usuario_id"];
+			$this->confirmacionCredenciales = (bool) $row ["confirmacion_credenciales_sokker"];
+		}
+		/*
+		 * if (!isset($this->usuarioId)) { throw new Exception("Password incorrect."); }
+		 */
 	}
 }
