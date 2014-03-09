@@ -21,6 +21,7 @@ require_once 'objects/user/xUsuarioSokkerTeam.php';
 require_once 'objects/sokker/habilidad.class.php';
 require_once 'util/context.class.php';
 require_once 'util/date.util.php';
+require_once 'errors/errors.control.php';
 
 class JuniorXmlImpl implements XmlI {
 	private $id;
@@ -40,19 +41,22 @@ class JuniorXmlImpl implements XmlI {
 
 	public function loadFromXML(SimpleXMLElement $node, $sokkerTeamId) {
 		try {
+			Logger::logWarning("Starting to process junior ".$node->name);
 			$this->juniorId = Encrypt::enc($node->ID);
+			Logger::logWarning($this->juniorId);
 			$this->altura = $node->height;
 			$this->peso = $node->weight;
 			$this->imc = $node->BMI;
-			$this->semanas = $node->weeks;
-			$this->habilidad = $node->skill;
+			$this->semanas = (string) $node->weeks;
+			$this->habilidad = (string) $node->skill;
 			$this->sokkerTeamId = $sokkerTeamId;
+			$this->edad = Encrypt::enc($node->age);
 			
 			$this->getIdJunior();
-			if (! $this->isExists()) {
+			if (! $this->exists()) {
+				Logger::logWarning("Junior does not exist in DB");
 				$this->nombre = Encrypt::enc($node->name);
 				$this->apellido = Encrypt::enc($node->surname);
-				$this->edad = Encrypt::enc($node->age);
 				$this->formacion = $node->formation;
 			}
 		}
@@ -63,10 +67,12 @@ class JuniorXmlImpl implements XmlI {
 
 	public function insertIntoDB() {
 		try {
-			if ($this->isExists()) {
+			if ($this->exists()) {
+				Logger::logWarning("Updating information");
 				$this->updateJunior();
 			}
 			else {
+				Logger::logWarning("Trying to insert Junior");
 				$this->insertJunior();
 			}
 			
@@ -74,10 +80,14 @@ class JuniorXmlImpl implements XmlI {
 			$habilidad->setJuniorId($this->id);
 			$habilidad->setHabilidad($this->habilidad);
 			$habilidad->setSemanas($this->semanas);
-			if (! $this->isExists() || $habilidad->hayActualizar()) {
+			if (! $this->exists() || $habilidad->hayActualizar()) {
+				Logger::logWarning("New week! Inserting new skills");
 				$habilidad->insertSemana();
 			}
 			unset($habilidad);
+		}
+		catch (PDOException $pdoe) {
+			throw new PDOException($pdoe->getMessage(), $pdoe->getCode(), $pdoe->getPrevious());
 		}
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
@@ -89,16 +99,13 @@ class JuniorXmlImpl implements XmlI {
 	}
 
 	private function getIdJunior() {
+		$query = "SELECT id FROM juniors WHERE sokker_team_id=:sokker_team_id AND junior_id=:junior_id";
+		$params = array ();
+		$params [":sokker_team_id"] = $this->sokkerTeamId;
+		$params [":junior_id"] = $this->juniorId;
 		try {
-			$pdo = DBUtil::getConexion();
-			$stmt = $pdo->prepare("SELECT id FROM juniors WHERE sokker_team_id=:sokker_team_id AND junior_id=:junior_id");
-			
-			$stmt->bindParam(":sokker_team_id", $this->sokkerTeamId);
-			$stmt->bindParam(":junior_id", $this->juniorId);
-			$stmt->execute();
-			
-			$this->id = $stmt->fetchColumn();
-			unset($stmt);
+			$this->id = DBUtil::select($query, $params);
+			Logger::logWarning("The junior id is ".$this->id);
 		}
 		catch (PDOException $e) {
 			throw new Exception("Not sure were the junior went! j99");
@@ -106,31 +113,24 @@ class JuniorXmlImpl implements XmlI {
 	}
 
 	private function insertJunior() {
+		$insert = "INSERT INTO juniors (junior_id, sokker_team_id, nombre, apellido, edad, altura, peso, imc, formacion, semanas) ";
+		$insert .= "VALUES (:junior_id, :sokker_team_id, :nombre, :apellido, :edad, :altura, :peso, :imc, :formacion, :semanas)";
+		
+		$params = array ();
+		$params [":junior_id"] = $this->juniorId;
+		$params [":sokker_team_id"] = $this->sokkerTeamId;
+		$params [":nombre"] = $this->nombre;
+		$params [":apellido"] = $this->apellido;
+		$params [":formacion"] = $this->formacion;
+		$params [":edad"] = $this->edad;
+		$params [":altura"] = $this->altura;
+		$params [":peso"] = $this->peso;
+		$params [":imc"] = $this->imc;
+		$params [":semanas"] = $this->semanas;
 		try {
-			$pdo = DBUtil::getConexion();
-			
-			$insert = "INSERT INTO juniors (junior_id, sokker_team_id, nombre, apellido, edad, altura, peso, imc, formacion, semanas) ";
-			$insert .= "VALUES (:junior_id, :sokker_team_id, :nombre, :apellido, :edad, :altura, :peso, :imc, :formacion, :semanas)";
-			
-			$stmt = $pdo->prepare($insert);
-			$stmt->bindParam(":junior_id", $this->juniorId);
-			$stmt->bindParam(":sokker_team_id", $this->sokkerTeamId);
-			$stmt->bindParam(":nombre", $this->nombre);
-			$stmt->bindParam(":apellido", $this->apellido);
-			$stmt->bindParam(":formacion", $this->formacion);
-			$stmt->bindParam(":edad", $this->edad);
-			$stmt->bindParam(":altura", $this->altura);
-			$stmt->bindParam(":peso", $this->peso);
-			$stmt->bindParam(":imc", $this->imc);
-			$stmt->bindParam(":semanas", $this->semanas);
-			
-			$pdo->beginTransaction();
-			$stmt->execute();
-			$this->id = $pdo->lastInsertId();
-			$pdo->commit();
+			$this->id = DBUtil::insert($insert, $params);
 		}
 		catch (PDOException $e) {
-			$pdo->rollBack();
 			$this->id = - 1;
 			throw new Exception("A junior was lost, shame! j131");
 		}
@@ -138,27 +138,22 @@ class JuniorXmlImpl implements XmlI {
 
 	private function updateJunior() {
 		try {
-			$pdo = DBUtil::getConexion();
-			$stmt;
-			$stmt = $pdo->prepare("UPDATE juniors SET edad=:edad, altura=:altura, peso=:peso, imc=:imc, semanas=:semanas WHERE id=:id");
-			$stmt->bindParam(":id", $this->id);
-			$stmt->bindParam(":edad", $this->edad);
-			$stmt->bindParam(":altura", $this->altura);
-			$stmt->bindParam(":peso", $this->peso);
-			$stmt->bindParam(":imc", $this->imc);
-			$stmt->bindParam(":semanas", $this->semanas);
+			$params [":id"] = $this->id;
+			$params [":edad"] = $this->edad;
+			$params [":altura"] = $this->altura;
+			$params [":peso"] = $this->peso;
+			$params [":imc"] = $this->imc;
+			$params [":semanas"] = $this->semanas;
 			
-			$pdo->beginTransaction();
-			$stmt->execute();
-			$pdo->commit();
+			$query = "UPDATE juniors SET edad=:edad, altura=:altura, peso=:peso, imc=:imc, semanas=:semanas, sigue_en_escuela=1 WHERE id=:id";
+			DBUtil::update($query, $params);
 		}
 		catch (PDOException $e) {
-			$pdo->rollBack();
 			throw new Exception("the junior is too tired for new information to be learned! j154");
 		}
 	}
 
-	public function isExists() {
+	public function exists() {
 		return (bool) $this->id;
 	}
 }

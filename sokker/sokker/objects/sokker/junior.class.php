@@ -14,6 +14,7 @@
 // sigue_en_escuela tinyint(1) not null default 1,
 // foreign key sokker_team_id references x_usuario_sokker_team(sokker_team_id) on delete cascade
 require_once 'habilidad.class.php';
+require_once 'util/talento.util.php';
 
 class Junior {
 	private $id;
@@ -25,7 +26,7 @@ class Junior {
 	private $peso;
 	private $imc;
 	private $formacion;
-	private $progreso;
+	private $progress;
 
 	public function setId($id) {
 		$this->id = $id;
@@ -96,43 +97,67 @@ class Junior {
 	}
 
 	public function getFormacion() {
-		return $this->formacion;
+		return ($this->formacion == 1) ? "PL" : "GK";
 	}
 
-	public function getProgreso() {
-		return $this->progreso;
+	public function getProgress() {
+		return $this->progress;
 	}
 
 	public static function loadJuniors($xustId) {
+		$query = "SELECT id, junior_id, nombre, apellido, edad, altura, peso, imc, formacion FROM juniors WHERE sokker_team_id=:sokker_team_id ORDER BY semanas ASC";
+		
+		$params = array();
+		$params[":sokker_team_id"] = $xustId;
 		try {
-			$pdo = DBUtil::getConexion();
-			$stmt = $pdo->prepare("SELECT id, junior_id, nombre, apellido, edad, altura, peso, imc, formacion FROM juniors WHERE sokker_team_id=:sokker_team_id");
-			$stmt->bindParam(":sokker_team_id", $xustId);
-			$stmt->execute();
-			
-			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+			return DBUtil::select($query, $params, PDO::FETCH_ASSOC);
 		}
 		catch (PDOException $e) {
 			throw new Exception("Unable to load juniors at xust line 96");
 		}
 	}
 
-	public function loadProgreso() {
+	public function loadProgress() {
 		try {
 			$h = new Habilidad();
 			$h->setJuniorId($this->id);
 			
-			$this->progreso = array ();
-			foreach ($h->loadSemanas() as $row) {
+			$this->progress = array ();
+			foreach ($h->loadWeeks() as $row) {
 				$tmpHabilidad = new Habilidad();
 				$tmpHabilidad->setHabilidad($row ['habilidad']);
 				$tmpHabilidad->setSemanas($row ['semanas']);
-				$this->progreso [] = $tmpHabilidad;
+				$this->progress [] = $tmpHabilidad;
 			}
 			unset($h);
 		}
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
+	}
+	
+	public function getTalent() {
+		$weeks = array();
+		foreach ($this->progress as $progress) {
+			$weeks[] = intval($progress->getHabilidad());
+		}
+		if (count($weeks) == 0) {
+			Logger::logWarning("Junior->getTalent() empty data for id: ".$this->id);
+		}
+		return TalentUtil::juniorTalent($weeks);
+	}
+	
+	public function __toString() {
+		$junior =  "<div class='div-table-col'>{$this->getJuniorId()}</div>";
+		$junior .= "<div class='div-table-col div-name'>{$this->getNombre()}</div>";
+		$junior .= "<div class='div-table-col div-lastname'>{$this->getApellido()}</div>";
+		$junior .= "<div class='div-table-col div-age'>{$this->getEdad()}</div>";
+		$junior .= "<div class='div-table-col div-height'>{$this->getAltura()}</div>";
+		$junior .= "<div class='div-table-col div-weight'>{$this->getPeso()}</div>";
+		$junior .= "<div class='div-table-col div-imc'>{$this->getIMC()}</div>";
+		$junior .= "<div class='div-table-col div-formation'>{$this->getFormacion()}</div>";
+		$junior .= "<div class='div-table-col div-talent'>{$this->getTalent()}</div>";
+		
+		return $junior;
 	}
 }

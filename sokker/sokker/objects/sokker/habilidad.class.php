@@ -30,35 +30,25 @@ class Habilidad {
 	}
 
 	public function insertSemana() {
+		$query = 'INSERT INTO habilidad_junior (junior_id, habilidad, semanas) VALUES (:junior_id, :habilidad, :semanas)';
+		$params = array();
+		$params[':junior_id'] = $this->juniorId;
+		$params[':habilidad'] = $this->habilidad;
+		$params[':semanas'] = $this->semanas;
 		try {
-			echo $this->juniorId." ".$this->habilidad." ".$this->semanas."<br>";
-			$pdo = DBUtil::getConexion();
-			$stmt = $pdo->prepare("INSERT INTO habilidad_junior (junior_id, habilidad, semanas) VALUES (:junior_id, :habilidad, :semanas)");
-			$stmt->bindParam(":junior_id", $this->juniorId);
-			$stmt->bindParam(":habilidad", $this->habilidad);
-			$stmt->bindParam(":semanas", $this->semanas);
-			
-			$pdo->beginTransaction();
-			$stmt->execute();
-			$pdo->commit();
+			DBUtil::insert($query, $params);
 		}
 		catch (PDOException $e) {
-			$pdo->rollBack();
-			throw new Exception("Unable to insert Semana: habilidad.class line: 47");
+			throw new PDOException($e->getMessage(), $e->getCode(), $e->getPrevious());
 		}
 	}
 
 	private function ultimaSemana() {
+		$query = "SELECT semanas FROM habilidad_junior WHERE junior_id=:junior_id ORDER BY semanas ASC LIMIT 1";
+		$params = array();
+		$params[":junior_id"] = $this->juniorId;
 		try {
-			$pdo = DBUtil::getConexion();
-			$stmt = $pdo->prepare("SELECT semanas FROM habilidad_junior WHERE junior_id=:junior_id ORDER BY semanas ASC LIMIT 1");
-			
-			$stmt->bindParam(":junior_id", $this->juniorId);
-			$stmt->execute();
-			$semanas = $stmt->fetchColumn();
-			unset($stmt);
-			
-			return $semanas;
+			return DBUtil::select($query, $params);
 		}
 		catch (PDOException $e) {
 			throw new Exception("Unable to retrieve SEMANAS: habilidad.class line: 62");
@@ -67,25 +57,22 @@ class Habilidad {
 	
 	public function hayActualizar() {
 		$ultima = $this->ultimaSemana();
-		if (!((bool) $ultima) || $ultima < $this->getSemanas()) {
+		if (!isset($ultima) || $ultima == "" || $ultima > $this->getSemanas()) {
 			return true;
 		}
 		return false;
 	}
 
-	public function loadSemanas() {
+	public function loadWeeks() {
 		try {
-			$pdo = DBUtil::getConexion();
-			$stmt = $pdo->prepare("SELECT habilidad, semanas FROM habilidad_junior WHERE junior_id=:junior_id");
+			$params = array();
+			$params[":junior_id"] = $this->juniorId;
 			
-			$stmt->bindParam(":junior_id", $this->juniorId);
-			$stmt->execute();
-			
-			$this->progreso = array ();
-			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+			$query = "SELECT habilidad, semanas FROM habilidad_junior WHERE junior_id=:junior_id ORDER BY semanas DESC";
+			return DBUtil::select($query, $params, PDO::FETCH_ASSOC);
 		}
-		catch (PDOException $e) {
-			throw new Exception("Unable to retrieve HABILIDAD and SEMANAS: habilidad.class line 78");
+		catch (Exception $e) {
+			throw new Exception($e->getMessage());
 		}
 	}
 }

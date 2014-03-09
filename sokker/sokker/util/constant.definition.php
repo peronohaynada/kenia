@@ -15,6 +15,6 @@ define("dns", "mysql:dbname=test;host=127.0.0.1");
 define("username", "root");
 define("password", "root");
 
-define("enckeycode", "some key here");
+define("enckeycode", "paso.maksjg~snjiuv½69087b");
 
-define("WARNING_LOG", "/sokker/sokker/errors/warnings.log");//fix the path in case it doesn't log
+define("WARNING_LOG", "errors/warnings.log");//fix the path in case it doesn't log

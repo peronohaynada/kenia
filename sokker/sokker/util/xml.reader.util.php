@@ -21,6 +21,9 @@ class XMLReaderUtil {
 			}
 			$xmlReader->close();
 		}
+		catch (PDOException $pdoe) {
+			throw new PDOException($pdoe->getMessage(), $pdoe->getCode(), $pdoe->getPrevious());
+		}
 		catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}

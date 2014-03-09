@@ -16,6 +16,7 @@ class Context {
 	private $body;
 	
 	private $error;
+	private $errorMessage;
 	
 	public function Context() {
 		$this->error = false;
@@ -66,6 +67,7 @@ class Context {
 			$sokkerID = Encrypt::enc($sokkerID, enckeycode);
 		}
 		else {
+			$this->errorMessage = $this->body;
 			$this->error = true;
 		}
 		return $sokkerID;
@@ -89,6 +91,7 @@ class Context {
 		return $this->body;
 		}
 		catch (Exception $e) {
+			Logger::logWarning($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
 	}
@@ -108,6 +111,10 @@ class Context {
 	
 	public function isError() {
 		return $this->error;
+	}
+	
+	public function getErrorMessage() {
+		return $this->errorMessage;
 	}
 	
 	public static function getSokkerId() {

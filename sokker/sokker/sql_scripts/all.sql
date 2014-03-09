@@ -31,7 +31,7 @@ CREATE TABLE `test`.`juniors` (
 	`peso` VARCHAR(256) NOT NULL,
 	`imc` VARCHAR(256) NOT NULL,
 	`formacion` tinyint(1) NOT NULL DEFAULT 1,
-	`semanas` VARCHAR(256) NOT NULL,
+	`semanas` SMALLINT(10) NOT NULL,
 	`sigue_en_escuela` tinyint(1) NOT NULL DEFAULT 1,
 	PRIMARY KEY (`id`),
 	KEY `sokker_team` (`sokker_team_id`),
@@ -43,8 +43,8 @@ CREATE TABLE `test`.`juniors` (
 CREATE TABLE `test`.`habilidad_junior` (
 	`id` INTEGER NOT NULL AUTO_INCREMENT,
 	`junior_id` INTEGER NOT NULL,
-	`habilidad` VARCHAR(256) NOT NULL,
-	`semanas` VARCHAR(256) NOT NULL,
+	`habilidad` INTEGER NOT NULL,
+	`semanas` INTEGER NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `junior` (`junior_id`),
 	CONSTRAINT `fk_juniors` FOREIGN KEY (`junior_id`)

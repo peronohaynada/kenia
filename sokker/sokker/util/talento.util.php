@@ -1,30 +1,30 @@
 <?php
 
-//$habilidades = array(7,3,6,3,5,5,6,4,6,6,6,6,6,7,5,8,7,7,7);
-//echo TalentoUtil::talentoJuvenil($habilidades);
+//$hability = array(7,3,6,3,5,5,6,4,6,6,6,6,6,7,5,8,7,7,7);
+//echo TalentUtil::juniorTalent($hability);
 
-class TalentoUtil {
+class TalentUtil {
 
-	public static function talentoJuvenil ($habilidades) {
+	public static function juniorTalent ($hability) {
 		$total = 0;
 		$totalKey = 0;
-		foreach ($habilidades as $key => $value) {
+		foreach ($hability as $key => $value) {
 			$total += $value;
-			//$totalKey += $key; // esto podr�a hacerse de la forma :: n*(n+1)/2
+			//$totalKey += $key; // could be done in the following way :: n*(n+1)/2
 		}
-		$size = count($habilidades);
+		$size = count($hability);
 		$totalKey = $size * ( $size - 1) / 2;
-		$promedio = $total / $size;
-		$promedioKey = $totalKey / $size;
-		$primera = 0;
-		$segunda = 0;
-		foreach ($habilidades as $key => $value) {
-			$tmpValue = $value - $promedio;
-			$tmpKey = $key - $promedioKey;
-			$primera += $tmpValue * $tmpKey;
-			$segunda += pow($tmpKey, 2);
+		$average = $total / $size;
+		$averageKey = $totalKey / $size;
+		$first = 0;
+		$second = 0;
+		foreach ($hability as $key => $value) {
+			$tmpValue = $value - $average;
+			$tmpKey = $key - $averageKey;
+			$first += $tmpValue * $tmpKey;
+			$second += pow($tmpKey, 2);
 		}
-		$resultado = ($primera / $segunda);
-		return ($resultado == 0) ? 0 : 1 / $resultado;
+		$result = ($first / $second);
+		return ($first == 0) ? 0 : 1 / $result;
 	}
 }

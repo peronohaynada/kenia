@@ -21,7 +21,7 @@ class XUsuarioSokkerTeam {
 	public function loadData($usuarioId) {
 		try {
 			$this->id = $this->getId($usuarioId);
-			Logger::logWarning("Loading ".$usuarioId);
+			Logger::logWarning("XUsuarioSokkerTeam->loadData(".$usuarioId.")");
 			$this->loadJuniors();
 		}
 		catch (Exception $e) {
@@ -37,41 +37,47 @@ class XUsuarioSokkerTeam {
 		else {
 			$this->pSokker = null;
 		}
+		$params = array();
 		$lastId = - 1;
+		
+		$params[":sokker_team_id"] = $sokkerId;
+		$params[":usuario_sokker"] = Encrypt::enc($this->uSokker);
+		$params[":contrasena_sokker"] = $this->pSokker;
+		$params[":usuario_id"] = $usuarioId;
+		
 		try {
-			$db = DBUtil::getConexion();
-			$stmt = $db->prepare($query);
-			$db->beginTransaction();
-			$stmt->bindParam(":sokker_team_id", $sokkerId);
-			$stmt->bindParam(":usuario_sokker", Encrypt::enc($this->uSokker));
-			$stmt->bindParam(":contrasena_sokker", $this->pSokker);
-			$stmt->bindParam(":usuario_id", $usuarioId);
-			$stmt->execute();
-			$lastId = $db->lastInsertId();
-			$db->commit();
+			$lastId = DBUtil::insert($query, $params);
 		}
 		catch (PDOException $e) {
-			$db->rollBack();
 			$lastId = - 1;
 			throw new Exception("Error when inserting in xust line: 52");
 		}
 		return $lastId;
 	}
+	
+	public function getCredentials($userId, $confirmacionCredenciales) {
+		$query = "SELECT usuario_sokker, contrasena_sokker, id FROM x_usuario_sokker_team WHERE usuario_id=:usuario_id";
+		$params = array();
+		$params[":usuario_id"] = $userId;
+		
+		$result = DBUtil::select($query, $params, PDO::FETCH_ASSOC);
+		foreach ($result as $row) {
+			$this->uSokker = Encrypt::dec($row["usuario_sokker"]);
+			$this->pSokker = ($confirmacionCredenciales == 1) ? Encrypt::dec($row["contrasena_sokker"]) : "";
+			$this->id = $row["id"];
+		}
+	}
 
-	private function getId($usuarioId) {
+	public function getId($usuarioId) {
+		$query = "select xust.id as ID from usuario u ";
+		$query .= "join x_usuario_sokker_team xust on xust.usuario_id = u.usuario_id ";
+		$query .= "where u.usuario_id=:usuario_id";
+		// $query .= "and xust.baneado < 3";
+		
+		$params = array();
+		$params[":usuario_id"] = $usuarioId;
 		try {
-			$pdo = DBUtil::getConexion();
-			$query = "select xust.id from usuario u ";
-			$query .= "join x_usuario_sokker_team xust on xust.usuario_id = u.usuario_id ";
-			$query .= "where u.usuario_id=:usuario_id";
-			// $query .= "and xust.baneado < 3";
-			$stmt = $pdo->prepare($query);
-			
-			$stmt->bindParam(":usuario_id", $usuarioId);
-			$stmt->execute();
-			$id = $stmt->fetchColumn();
-			unset($stmt);
-			return $id;
+			return DBUtil::select($query, $params);;
 		}
 		catch (PDOException $e) {
 			throw new Exception("Unable to get id from xust line 72");
@@ -83,11 +89,11 @@ class XUsuarioSokkerTeam {
 			$this->juniors = array ();
 			foreach (Junior::loadJuniors($this->id) as $row) {
 				
-				Logger::logWarning("Loading ".$row ['id']." name: ".$row ['nombre']." lastname: ".$row ['apellido']);
+				Logger::logWarning("XUsuarioSokkerTeam->loadJuniors() id: ".$row ['id']." name: ".$row ['nombre']." lastname: ".$row ['apellido']);
 
 				$junior = new Junior();
 				$junior->setId($row ['id']);
-				$junior->setJuniorId($row ['junior_id']);
+				$junior->setJuniorId(Encrypt::dec($row ['junior_id']));
 				$junior->setNombre(Encrypt::dec($row ['nombre']));
 				$junior->setApellido(Encrypt::dec($row ['apellido']));
 				$junior->setEdad(Encrypt::dec($row ['edad']));
@@ -95,7 +101,7 @@ class XUsuarioSokkerTeam {
 				$junior->setPeso($row ['peso']);
 				$junior->setIMC($row ['imc']);
 				$junior->setFormacion($row ['formacion']);
-				$junior->loadProgreso();
+				$junior->loadProgress();
 				
 				$this->juniors [] = $junior;
 			}
@@ -106,16 +112,12 @@ class XUsuarioSokkerTeam {
 	}
 
 	public static function isBanned($usuarioId) {
+		$query = "update x_usuario_sokker_team set baneado = baneado + 1 where usuario_id=:usuario_id";
+		$params[":usuario_id"] = $usuarioId;
 		try {
-			$pdo = DBUtil::getConexion();
-			$stmt = $pdo->prepare("update x_usuario_sokker_team set baneado = baneado + 1 where usuario_id=:usuario_id");
-			$stmt->bindColumn(":usuario_id", $usuarioId);
-			$pdo->beginTransaction();
-			$stmt->execute();
-			$pdo->commit();
+			DBUtil::update($query, $params);
 		}
 		catch (PDOException $e) {
-			$pdo->rollBack();
 			throw new Exception("Unable to execute at xust line 111");
 		}
 	}
@@ -123,9 +125,17 @@ class XUsuarioSokkerTeam {
 	public function setUSokker($uSokker) {
 		$this->uSokker = $uSokker;
 	}
+	
+	public function getUSokker() {
+		return $this->uSokker;
+	}
 
 	public function setPSokker($pSokker) {
 		$this->pSokker = $pSokker;
+	}
+	
+	public function getPSokker() {
+		return $this->pSokker;
 	}
 	
 	public function getJuniors() {

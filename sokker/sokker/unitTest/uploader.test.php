@@ -1,3 +1,5 @@
 <?php
-require_once 'uploader.util.php';
-UploaderUtil::uploadFile();
+require_once 'util/uploader.util.php';
+require_once 'templates/uploader.html';
+
+UploaderUtil::upload();
