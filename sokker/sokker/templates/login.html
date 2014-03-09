@@ -1,0 +1,13 @@
+		<div id="loginForm">
+			<form action="?login" method="post">
+				<div class="label"><label for="username">username:</label></div>
+				<div class="input"><input type="text" id="username" name="username"></div>
+				<div class="label"><label for="password">password:</label></div>
+				<div class="input"><input type="password" id="password" name="password"></div>
+				<div class="label">&nbsp;</div>
+				<div class="input"><input type="submit" value="Login"></div>
+			</form>
+			<?php if (isset($loginError)): ?>
+	<div id="error"><span><?php echo $loginError; ?></span></div>
+			<?php endif; ?>
+</div>
