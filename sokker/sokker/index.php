@@ -35,7 +35,6 @@ if (!$sess) {
 </head>
 <body>
 	<div id="body">
-		<div class="logo">la</div>
 		<div class="header">
 <?php if ($sess): ?>
 	<a href="#"><span><?php echo $_SESSION['username']; ?></span></a>
@@ -45,7 +44,6 @@ if (!$sess) {
 	<a href="?register"><span>register</span></a>
 <?php endif;?>
 		</div>
-		<div class="navigator">la</div>
 		<div class="content">
 <?php
 
@@ -54,6 +52,16 @@ if ($sess) {
 	$user->loadSokkerData();
 	$juniors = $user->getSokkerData()->getJuniors();
 	echo "<div class='div-table'>\n";
+	$htable = "<div class='div-table-col div-table-header div-name'>Nombre</div>";
+	$htable .= "<div class='div-table-col div-table-header div-lastname'>Apellido</div>";
+	$htable .= "<div class='div-table-col div-table-header div-age'>Edad</div>";
+	$htable .= "<div class='div-table-col div-table-header div-height'>Altura</div>";
+	$htable .= "<div class='div-table-col div-table-header div-weight'>Peso</div>";
+	$htable .= "<div class='div-table-col div-table-header div-imc'>IMC</div>";
+	$htable .= "<div class='div-table-col div-table-header div-formation'>Formacion</div>";
+	$htable .= "<div class='div-table-col div-table-header div-talent'>Talento</div>";
+	$htable .= "<div class='div-table-col div-table-header div-talent'>Semanas</div>";
+	echo $htable;
 	foreach ($juniors as $junior) {
 		$junior->loadProgress();
 		echo "<div class='div-table-row' id='{$junior->getId()}'>$junior</div>\n";

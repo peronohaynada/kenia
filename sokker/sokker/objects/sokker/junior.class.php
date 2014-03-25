@@ -27,6 +27,7 @@ class Junior {
 	private $imc;
 	private $formacion;
 	private $progress;
+	private $totalWeeks;
 
 	public function setId($id) {
 		$this->id = $id;
@@ -103,6 +104,10 @@ class Junior {
 	public function getProgress() {
 		return $this->progress;
 	}
+	
+	public function getTotalWeeks() {
+		return $this->totalWeeks;
+	}
 
 	public static function loadJuniors($xustId) {
 		$query = "SELECT id, junior_id, nombre, apellido, edad, altura, peso, imc, formacion FROM juniors WHERE sokker_team_id=:sokker_team_id ORDER BY semanas ASC";
@@ -141,15 +146,16 @@ class Junior {
 		foreach ($this->progress as $progress) {
 			$weeks[] = intval($progress->getHabilidad());
 		}
-		if (count($weeks) == 0) {
+		$this->totalWeeks = count($weeks);
+		if ($this->totalWeeks == 0) {
 			Logger::logWarning("Junior->getTalent() empty data for id: ".$this->id);
 		}
 		return TalentUtil::juniorTalent($weeks);
 	}
 	
 	public function __toString() {
-		$junior =  "<div class='div-table-col'>{$this->getJuniorId()}</div>";
-		$junior .= "<div class='div-table-col div-name'>{$this->getNombre()}</div>";
+		//$junior =  "<div class='div-table-col'>{$this->getJuniorId()}</div>";
+		$junior = "<div class='div-table-col div-name'>{$this->getNombre()}</div>";
 		$junior .= "<div class='div-table-col div-lastname'>{$this->getApellido()}</div>";
 		$junior .= "<div class='div-table-col div-age'>{$this->getEdad()}</div>";
 		$junior .= "<div class='div-table-col div-height'>{$this->getAltura()}</div>";
@@ -157,6 +163,7 @@ class Junior {
 		$junior .= "<div class='div-table-col div-imc'>{$this->getIMC()}</div>";
 		$junior .= "<div class='div-table-col div-formation'>{$this->getFormacion()}</div>";
 		$junior .= "<div class='div-table-col div-talent'>{$this->getTalent()}</div>";
+		$junior .= "<div class='div-table-col div-talent'>{$this->getTotalWeeks()}</div>";
 		
 		return $junior;
 	}

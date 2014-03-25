@@ -1,0 +1,95 @@
+@CHARSET "UTF-8";
+#body {
+	max-width:900px;
+	margin-right:auto;
+	margin-left:auto;
+}
+.header, .content {
+	min-width:100%;
+}
+.header {
+	min-height:100px;
+	background-color: grey;
+}
+.content {
+	min-height:700px;
+}
+.content {
+	background-color:blue;
+	float:left;
+	width: 88%;
+}
+.header > a {
+	float:right;
+	padding:7px;
+}
+#loginForm {
+	inline:block;
+	max-width:500px;
+	min-width:250px;
+	background-color:green;
+}
+.label {
+	float:left;
+	background-color:yellow;
+	width:30%;
+}
+.input {
+	background-color:grey;
+}
+.input > input {
+	float:right;
+}
+#error {
+	inline:block;
+	float:left;
+}
+.junior {
+	float:left;
+}
+/*http://stackoverflow.com/questions/3053205/how-create-table-only-using-div-tag-and-css*/
+.div-table{
+	display:table;
+	width:100%;
+	background-color:#eee;
+	border:1px solid  #666666;
+	border-spacing:5px;/*cellspacing:poor IE support for  this*/
+}
+.div-table-row{
+	display:table-row;
+	width:auto;
+	clear:both;
+}
+.div-table-col{
+	float:left;/*fix for  buggy browsers*/
+	display:table-column;
+	background-color:#ccc;
+	border:1px solid  #666666;
+	padding:0 5px 0 5px;
+	text-align:center;
+	border-spacing:5px;/*cellspacing:poor IE support for  this*/
+}
+.div-name {
+	min-width:125px;
+}
+.div-lastname {
+	min-width:150px;
+}
+.div-age {
+	min-width: 45px;
+}
+.div-height {
+	min-width: 50px;
+}
+.div-weight {
+	min-width:40px;
+}
+.div-imc {
+	min-width: 45px;
+}
+.div-formation {
+	min-width:90px;
+}
+.div-talent {
+	width:10%;
+}
