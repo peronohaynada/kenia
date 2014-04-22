@@ -30,12 +30,13 @@ class VDSokker {
 	}
 
 	public static function loginToSokker($uSokker, $pSokker) {
-		try {
-			self::getContextInstance()->setData($uSokker, $pSokker);
-			return self::getContextInstance()->sendLoginRequestToSokker();
+		self::getContextInstance()->setData($uSokker, $pSokker);
+		$sokkerId = self::getContextInstance()->sendLoginRequestToSokker();
+		if(!self::getContextInstance()->isError()) {
+			return $sokkerId;
 		}
-		catch (Exception $e) {
-			throw new Exception($e->getMessage());
+		else {
+			throw new LoginException(self::getContextInstance()->getErrorMessage());
 		}
 	}
 

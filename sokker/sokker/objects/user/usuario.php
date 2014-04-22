@@ -16,6 +16,7 @@ class Usuario {
 	private $nombreUsuario;
 	private $confirmacionCredenciales;
 	private $sokkerData;
+	private $sokkerId;
 
 	public function registro($usuario, $contrasena, $uSokker, $pSokker, $confirmaCredenciales) {
 		$exito = true;
@@ -64,12 +65,16 @@ class Usuario {
 	public function login($usuario, $contrasena) {
 		$this->getUserId($usuario, $contrasena);
 		if ($this->usuarioId != 0) {
-			$this->sokkerData = new XUsuarioSokkerTeam();
-			$sokkerId = $this->sokkerData->getCredentials($this->usuarioId, $this->confirmacionCredenciales);
+			$this->getSokkerCredentials();
 		}
 		else {
 			throw new LoginException("Username or password invalid.");
 		}
+	}
+	
+	public function getSokkerCredentials() {
+		$this->sokkerData = new XUsuarioSokkerTeam();
+		$sokkerId = $this->sokkerData->getCredentials($this->usuarioId, $this->confirmacionCredenciales);
 	}
 
 	public function getUsuarioId() {
@@ -96,10 +101,14 @@ class Usuario {
 
 	public function updateDataFromSokker() {
 		Logger::logWarning("Usuario->updateDataFromSokker() ".$this->sokkerData->getUSokker() . ", " . $this->sokkerData->getPSokker());
-		$sokkerId = VDSokker::loginToSokker($this->sokkerData->getUSokker(), $this->sokkerData->getPSokker());
+		
 		$dbId = $this->sokkerData->getId($this->usuarioId);
-		Logger::logWarning("$sokkerId + $dbId");
-		VDSokker::descargaXML($sokkerId, $dbId);
+		Logger::logWarning("{$this->sokkerId} + $dbId");
+		VDSokker::descargaXML($this->sokkerId, $dbId);
+	}
+	
+	public function loginToSokker() {
+		$this->sokkerId = VDSokker::loginToSokker($this->sokkerData->getUSokker(), $this->sokkerData->getPSokker());
 	}
 
 	private function exists($usuario) {

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>talente juve</title>
+<link rel="stylesheet" type="text/css" href="css/wrapper.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+	<div class="content">
+		<div class="header">
+			<div class="main-header"><h1>talente juve</h1></div>
+			<div class="buttons-header">
+			<ul>
+[li_buttons]
+				<li><div class="complete"></div></li>
+				<li><div class="complete2"></div></li>
+				<li><div class="complete3"></div></li>
+				<li><div class="complete4"></div></li>
+			</ul>
+			</div>
+		</div>
+		<div class="body">
+[main_content]
+		</div>
+	</div>
+</body>
+</html>

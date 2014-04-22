@@ -1,95 +1,143 @@
 @CHARSET "UTF-8";
-#body {
-	max-width:900px;
-	margin-right:auto;
-	margin-left:auto;
+
+.content {
+	width: 800px;
+	margin: auto;
 }
-.header, .content {
-	min-width:100%;
-}
+
 .header {
-	min-height:100px;
-	background-color: grey;
+	width: auto;
+	background-color: #ffffff;
+	height: 164px;
 }
-.content {
-	min-height:700px;
+.main-header {
+	width: auto;
+	background-color: #34d0ba;
+	height: 130px;
 }
-.content {
-	background-color:blue;
-	float:left;
-	width: 88%;
+.main-header h1 {
+	font: 30px Comic Sans MS;
+    left: 517px;
+    position: relative;
+    top: 56px;
 }
-.header > a {
-	float:right;
-	padding:7px;
+.buttons-header {
+	width: auto;
+	background-color: #ffffff;
+	height: 34px;
 }
-#loginForm {
-	inline:block;
-	max-width:500px;
-	min-width:250px;
-	background-color:green;
+/*.complete, .complete2, .complete3, .complete4 {
+	height: 33px;
+	top: 2px;
+	display: inline-block;
+	position: relative;
 }
-.label {
-	float:left;
-	background-color:yellow;
-	width:30%;
+.complete {
+	width: 250px;
+	background-color: #052c5e;
 }
-.input {
-	background-color:grey;
+.complete2 {
+	width: 100px;
+	background-color: #052c5e;
 }
-.input > input {
-	float:right;
+.complete3 {
+	width: 75px;
+	background-color: #052c5e;
 }
-#error {
-	inline:block;
-	float:left;
+.complete4 {
+	width: 40px;
+	background-color: #052c5e;
+}*/
+.body {
+	width: auto;
+	margin-top: 10px;
+	border-radius: 5px 5px 0 0;
+	background-color: #ffffff;/*#d8d8d8;*/
 }
-.junior {
-	float:left;
+
+/*.header a {
+	right: 0;
+	background-color: #052c5e;
+	color: #6a92d4;
+	text-decoration: none;
+	width: 100px;
+	height: 30px;
+	top: 2px;
+	margin-right: 2px;
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	padding-top:3px;
+}*/
+
+
+.header a:hover {
+	background-color: #6a92d4;
+	color: #052c5e;
 }
-/*http://stackoverflow.com/questions/3053205/how-create-table-only-using-div-tag-and-css*/
-.div-table{
-	display:table;
-	width:100%;
-	background-color:#eee;
-	border:1px solid  #666666;
-	border-spacing:5px;/*cellspacing:poor IE support for  this*/
+
+.generalInformation {
+	width: 100%;
+	background-color: white;
+	border-collapse: collapse;
+	position: relative;
+	top: 20px;
+	border-radius: 5px 5px 0 0;
 }
-.div-table-row{
-	display:table-row;
-	width:auto;
-	clear:both;
+
+.generalInformation td {
+	text-align: center;
 }
-.div-table-col{
-	float:left;/*fix for  buggy browsers*/
-	display:table-column;
-	background-color:#ccc;
-	border:1px solid  #666666;
-	padding:0 5px 0 5px;
-	text-align:center;
-	border-spacing:5px;/*cellspacing:poor IE support for  this*/
+
+.talent, .hiddenInfo {
+	display: none
 }
-.div-name {
-	min-width:125px;
+
+.generalInformation td {
+	cursor: pointer;
 }
-.div-lastname {
-	min-width:150px;
+
+.generalInformation th {
+	padding-top: 10px;
+	padding-bottom: 5px;
 }
-.div-age {
-	min-width: 45px;
+
+.selected {
+	border-width: 2px;
 }
-.div-height {
-	min-width: 50px;
+
+.white {
+	background-color: #E4E4EC;
 }
-.div-weight {
-	min-width:40px;
+
+.dark {
+	background-color: #C8C8DA;
 }
-.div-imc {
-	min-width: 45px;
+
+li {
+	float: left;
+	display: block;
+	height: 31px;
+	margin-right: 3px;
+	margin-top: 3px;
+	
 }
-.div-formation {
-	min-width:90px;
+ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	position: absolute;
 }
-.div-talent {
-	width:10%;
+li a {
+	overflow: hidden;
+	display: block;
+	padding: 6px 18px;
+	text-decoration: none;
+	background-color: red;
+}
+li div {
+	display: block;
+	width: 40px;
+	background-color: red;
+	height: inherit;
 }

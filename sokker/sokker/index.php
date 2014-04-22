@@ -2,6 +2,8 @@
 require_once 'errors/login.exception.php';
 require_once 'objects/user/usuario.php';
 require_once 'util/input.validator.util.php';
+require_once 'util/constant.definition.php';
+require_once 'templates/nco_files/ncoHelper.class.php';
 
 session_start();
 $sess = isset($_SESSION) && isset($_SESSION ['id']);
@@ -15,6 +17,7 @@ if (!$sess) {
 				$user->login($_POST ['username'], $_POST ['password']);
 				$_SESSION['id'] = $user->getUsuarioId();
 				$_SESSION['username'] = $_POST['username'];
+				$_SESSION['tjuser'] = $user;
 				$sess = true;
 			}
 		}
@@ -24,57 +27,53 @@ if (!$sess) {
 		}
 	}
 }
+else {
+	$user = $_SESSION['tjuser'];
+	if (isset($_GET['update'])) {
+		require_once 'templates/update.php';
+	}
+}
 
-?>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Juves Talent</title>
-<link rel="stylesheet" type="text/css" href="css/wrapper.css">
-</head>
-<body>
-	<div id="body">
-		<div class="header">
-<?php if ($sess): ?>
-	<a href="#"><span><?php echo $_SESSION['username']; ?></span></a>
-	<a href="logout.php"><span>logout</span></a>
-<?php else: ?>
-	<a href="?login"><span>login</span></a>
-	<a href="?register"><span>register</span></a>
-<?php endif;?>
-		</div>
-		<div class="content">
-<?php
+$index = new NCOHelper(Constants::$nco_template_path . Constants::$nco_skeleton_template);
+$links;
+if ($sess) {
+	$links = '<li><a href="?update"><span>update</span></a></li>';
+	$links .= '<li><a href="?settings"><span>settings</span></a></li>';
+	$links .= '<li><a href="logout.php"><span>logout</span></a></li>';
+}
+else {
+	$links = '<li><a href="?login"><span>login</span></a></li>';
+	$links .= '<li><a href="?register"><span>register</span></a></li>';
+}
+$index->addContentToBuffer(Constants::$li_buttons, $links);
 
 if ($sess) {
-	$user->setUsuarioId($_SESSION['id']);
-	$user->loadSokkerData();
-	$juniors = $user->getSokkerData()->getJuniors();
-	echo "<div class='div-table'>\n";
-	$htable = "<div class='div-table-col div-table-header div-name'>Nombre</div>";
-	$htable .= "<div class='div-table-col div-table-header div-lastname'>Apellido</div>";
-	$htable .= "<div class='div-table-col div-table-header div-age'>Edad</div>";
-	$htable .= "<div class='div-table-col div-table-header div-height'>Altura</div>";
-	$htable .= "<div class='div-table-col div-table-header div-weight'>Peso</div>";
-	$htable .= "<div class='div-table-col div-table-header div-imc'>IMC</div>";
-	$htable .= "<div class='div-table-col div-table-header div-formation'>Formacion</div>";
-	$htable .= "<div class='div-table-col div-table-header div-talent'>Talento</div>";
-	$htable .= "<div class='div-table-col div-table-header div-talent'>Semanas</div>";
-	echo $htable;
-	foreach ($juniors as $junior) {
-		$junior->loadProgress();
-		echo "<div class='div-table-row' id='{$junior->getId()}'>$junior</div>\n";
+
+	if (isset($_GET['settings'])) {
+		
 	}
-	echo "</div>\n";
+	else {
+		$user->setUsuarioId($_SESSION['id']);
+		$user->loadSokkerData();
+		$juniors = $user->getSokkerData()->getJuniors();
+
+		$i = 1;
+		foreach ($juniors as $junior) {
+			$junior->loadProgress();
+			$class = ($i++ % 2 == 0) ? 'dark' : 'white';
+			$info .= "<tr class='$class' id='{$junior->getId()}'>$junior</tr>\n";
+		}
+		$table = new NCOHelper(Constants::$nco_template_path . Constants::$nco_general_information_table_template);
+		$table->addContentToBuffer(Constants::$junior_data, $info);
+	}
+	$index->addContentToBuffer(Constants::$main_content, $table->getBuffer());
 }
 else {
 	if (!$isLogin) {
-		require_once 'templates/login.html';
+		$ncoLogin = new NCOHelper(Constants::$nco_template_path . Constants::$nco_login_template);
+		$err = (isset($loginError)) ? "<div id='error'><span>$loginError</span></div>" : "";
+		$ncoLogin->addContentToBuffer(Constants::$login_error, $err);
+		$index->addContentToBuffer(Constants::$main_content, $ncoLogin->getBuffer());
 	}
 }
-?>
-		</div>
-	</div>
-</body>
-</html>
+echo $index->getBuffer();

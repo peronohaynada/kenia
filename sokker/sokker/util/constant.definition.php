@@ -18,3 +18,24 @@ define("password", "root");
 define("enckeycode", "paso.maksjg~snjiuv½69087b");
 
 define("WARNING_LOG", "errors/warnings.log");//fix the path in case it doesn't log
+
+class Constants {
+	// common templates path
+	public static $nco_template_path = "templates/nco_files/";
+	
+	// template name
+	public static $nco_skeleton_template = "skeleton.nco";
+	// place holders
+	public static $li_buttons = "[li_buttons]";
+	public static $main_content = "[main_content]";
+	
+	// template name
+	public static $nco_login_template = "login.nco";
+	// place holders
+	public static $login_error = "[login_error]";
+	
+	// template name
+	public static $nco_general_information_table_template = "general.information.table.nco";
+	// place holders
+	public static $junior_data = "[junior_data]";
+}

@@ -1,0 +1,16 @@
+<table class='generalInformation'>
+	<tr>
+		<th colspan='5'>&nbsp;</th>
+		<th colspan='2'>Semanas</th>
+	</tr>
+	<tr>
+		<th>Nombre</th>
+		<th>Apellido</th>
+		<th>Edad</th>
+		<th>Formacion</th>
+		<th>Talento</th>
+		<th>En escuela</th>
+		<th>Restantes</th>
+	</tr>
+	[junior_data]
+</table>

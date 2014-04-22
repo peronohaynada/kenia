@@ -27,6 +27,7 @@ class Junior {
 	private $imc;
 	private $formacion;
 	private $progress;
+	private $weeksInSchool;
 	private $totalWeeks;
 
 	public function setId($id) {
@@ -105,12 +106,19 @@ class Junior {
 		return $this->progress;
 	}
 	
+	public function setWeeksInSchool($weeksInSchool) {
+		$this->weeksInSchool = $weeksInSchool;
+	}
+	public function getWeeksInSchool() {
+		return $this->weeksInSchool;
+	}
+	
 	public function getTotalWeeks() {
 		return $this->totalWeeks;
 	}
 
 	public static function loadJuniors($xustId) {
-		$query = "SELECT id, junior_id, nombre, apellido, edad, altura, peso, imc, formacion FROM juniors WHERE sokker_team_id=:sokker_team_id ORDER BY semanas ASC";
+		$query = "SELECT id, junior_id, nombre, apellido, edad, altura, peso, imc, formacion, semanas FROM juniors WHERE sokker_team_id=:sokker_team_id ORDER BY semanas ASC";
 		
 		$params = array();
 		$params[":sokker_team_id"] = $xustId;
@@ -154,16 +162,16 @@ class Junior {
 	}
 	
 	public function __toString() {
-		//$junior =  "<div class='div-table-col'>{$this->getJuniorId()}</div>";
-		$junior = "<div class='div-table-col div-name'>{$this->getNombre()}</div>";
-		$junior .= "<div class='div-table-col div-lastname'>{$this->getApellido()}</div>";
-		$junior .= "<div class='div-table-col div-age'>{$this->getEdad()}</div>";
-		$junior .= "<div class='div-table-col div-height'>{$this->getAltura()}</div>";
-		$junior .= "<div class='div-table-col div-weight'>{$this->getPeso()}</div>";
-		$junior .= "<div class='div-table-col div-imc'>{$this->getIMC()}</div>";
-		$junior .= "<div class='div-table-col div-formation'>{$this->getFormacion()}</div>";
-		$junior .= "<div class='div-table-col div-talent'>{$this->getTalent()}</div>";
-		$junior .= "<div class='div-table-col div-talent'>{$this->getTotalWeeks()}</div>";
+		$junior = "<td>{$this->getNombre()}</td>";
+		$junior .= "<td>{$this->getApellido()}</td>";
+		$junior .= "<td>{$this->getEdad()}</td>";
+		$junior .= "<div class='hiddenInfo'>{$this->getAltura()}</div>";
+		$junior .= "<div class='hiddenInfo'>{$this->getPeso()}</div>";
+		$junior .= "<div class='hiddenInfo'>{$this->getIMC()}</div>";
+		$junior .= "<td>{$this->getFormacion()}</td>";
+		$junior .= "<td>{$this->getTalent()}</td>";
+		$junior .= "<td>{$this->getTotalWeeks()}</td>";
+		$junior .= "<td>{$this->getWeeksInSchool()}</td>";
 		
 		return $junior;
 	}

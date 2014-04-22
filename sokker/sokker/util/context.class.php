@@ -47,33 +47,33 @@ class Context {
 	
 	public function sendLoginRequestToSokker() {
 		try {
-		$this->setLoginOption();
-		$headers = $this->sendRequest(loginUrl);
-		$sokkerID = "";
-		
-		if (strpos($this->body, "OK teamID") !== false) {
-			$this->headers = array();
-			foreach($headers['wrapper_data'] as $line) {
-				if(strpos($line, 'HTTP') === 0) {
-					$headers[0] = $line;
-				}
-				else {
-					list($key, $value) = explode(': ', $line);
-					$this->headers[$key] = $value;
-				}
-			}
+			$this->setLoginOption();
+			$headers = $this->sendRequest(loginUrl);
+			$sokkerID = "";
 			
-			$sokkerID = str_replace("OK teamID=", "", $this->body);
-			$sokkerID = Encrypt::enc($sokkerID, enckeycode);
-		}
-		else {
-			$this->errorMessage = $this->body;
-			$this->error = true;
-		}
-		return $sokkerID;
+			if (strpos($this->body, "OK teamID") !== false) {
+				$this->headers = array();
+				foreach($headers['wrapper_data'] as $line) {
+					if(strpos($line, 'HTTP') === 0) {
+						$headers[0] = $line;
+					}
+					else {
+						list($key, $value) = explode(': ', $line);
+						$this->headers[$key] = $value;
+					}
+				}
+				
+				$sokkerID = str_replace("OK teamID=", "", $this->body);
+				$sokkerID = Encrypt::enc($sokkerID, enckeycode);
+			}
+			else {
+				$this->errorMessage = $this->body;
+				$this->error = true;
+			}
+			return $sokkerID;
 		}
 		catch (Exception $e) {
-			throw new Exception("the login must be in riot! cc74");
+			throw new LoginException("the login must be in riot! cc74");
 		}
 	}
 	

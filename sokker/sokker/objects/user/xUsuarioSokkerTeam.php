@@ -101,6 +101,7 @@ class XUsuarioSokkerTeam {
 				$junior->setPeso($row ['peso']);
 				$junior->setIMC($row ['imc']);
 				$junior->setFormacion($row ['formacion']);
+				$junior->setWeeksInSchool($row['semanas']);
 				$junior->loadProgress();
 				
 				$this->juniors [] = $junior;
