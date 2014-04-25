@@ -13,7 +13,10 @@ class TalentUtil {
 			//$totalKey += $key; // could be done in the following way :: n*(n+1)/2
 		}
 		$size = count($hability);
-		$totalKey = $size * ( $size - 1) / 2;
+		if ($size == 1) {
+			return 'N/A';
+		}
+		$totalKey = $size * ( $size + 1) / 2;
 		$average = $total / $size;
 		$averageKey = $totalKey / $size;
 		$first = 0;
