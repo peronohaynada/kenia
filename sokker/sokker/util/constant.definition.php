@@ -38,4 +38,19 @@ class Constants {
 	public static $nco_general_information_table_template = "general.information.table.nco";
 	// place holders
 	public static $junior_data = "[junior_data]";
+	
+	//template name
+	public static $nco_register_template = "register.nco";
+	//place holders
+	public static $register_error = "[register_error]";
+	
+	//template name
+	public static $nco_settings_template = "settings.nco";
+	//place holders
+	public static $settings_error = "[settings_error]";
+	
+	//template name
+	public static $nco_update_template = "update.nco";
+	//place holders
+	public static $update_error = "[update_error]";
 }

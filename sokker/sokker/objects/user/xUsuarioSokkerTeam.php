@@ -135,6 +135,15 @@ class XUsuarioSokkerTeam {
 		$this->pSokker = $pSokker;
 	}
 	
+	public function updatePSokker($pSokker) {
+		$query = "UPDATE x_usuario_sokker_team SET contrasena_sokker=:contrasena_sokker where id=:id";
+		$params = array();
+		$params[':contrasena_sokker'] = Encrypt::enc($pSokker);
+		$params[':id'] = $this->id;
+		
+		DBUtil::update($query, $params);
+	}
+	
 	public function getPSokker() {
 		return $this->pSokker;
 	}

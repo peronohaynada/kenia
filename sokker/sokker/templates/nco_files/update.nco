@@ -1,0 +1,14 @@
+<div id="loginForm">
+	<form action="?update&up" method="post">
+		<div class="label"><label for="spassword">Sokker password:</label></div>
+		<div class="input"><input type="password" id="spassword" name="spassword"></div>
+		<div class="label"><label for="confirmation">Deseas que talente juve recuerde tus credenciales de sokker?</label></div>
+		<div class="input"><input type="checkbox" id="confirmation" name="confirmation" value="yes"></div>
+		<div class="label">&nbsp;</div>
+		<div class="input"><input type="submit" value="Update"></div>
+	</form>
+	[update_error]
+	<div class="footer">
+		<a class="returnLink" href="index.php">go back</a>
+	</div>
+</div>

@@ -41,19 +41,19 @@ class Usuario {
 							$this->loadSokkerData();
 						}
 						else {
-							throw new RegisterException("Conection failure between sokker and us, please try again later.");
+							throw new Exception("Conection failure between sokker and us, please try again later.");
 						}
 					}
 					else {
-						throw new RegisterException("Unable to store user in database.");
+						throw new Exception("Unable to store user in database.");
 					}
 				}
 				else {
-					throw new RegisterException(VDSokker::getContextErrorMessage());
+					throw new Exception(VDSokker::getContextErrorMessage());
 				}
 			}
 			else {
-				throw new RegisterException("User Exists.");
+				throw new Exception("User Exists.");
 			}
 		}
 		catch (Exception $e) {
@@ -68,7 +68,7 @@ class Usuario {
 			$this->getSokkerCredentials();
 		}
 		else {
-			throw new LoginException("Username or password invalid.");
+			throw new Exception("Username or password invalid.");
 		}
 	}
 	
@@ -89,6 +89,16 @@ class Usuario {
 		return $this->confirmacionCredenciales;
 	}
 
+	public function setConfirmacionCredenciales($confirmacionCredenciales) {
+		$query = "UPDATE usuario SET confirmacion_credenciales_sokker=:confirmacionCredenciales WHERE usuario_id=:usuario_id";
+		$params = array();
+		$params[':confirmacionCredenciales'] = $confirmacionCredenciales;
+		$params[':usuario_id'] = $this->usuarioId;
+		
+		DBUtil::update($query, $params);
+		$this->confirmacionCredenciales = $confirmacionCredenciales;
+	}
+
 	public function loadSokkerData() {
 		try {
 			$this->sokkerData = new XUsuarioSokkerTeam();
@@ -107,8 +117,11 @@ class Usuario {
 		VDSokker::descargaXML($this->sokkerId, $dbId);
 	}
 	
-	public function loginToSokker() {
-		$this->sokkerId = VDSokker::loginToSokker($this->sokkerData->getUSokker(), $this->sokkerData->getPSokker());
+	public function loginToSokker($pSokker = null) {
+		if ($this->getConfirmacionCredenciales() && !isset($pSokker)) {
+			$pSokker = $this->sokkerData->getPSokker();
+		}
+		$this->sokkerId = VDSokker::loginToSokker($this->sokkerData->getUSokker(), $pSokker);
 	}
 
 	private function exists($usuario) {
