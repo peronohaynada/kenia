@@ -96,7 +96,7 @@ class XUsuarioSokkerTeam {
 				$junior->setJuniorId(Encrypt::dec($row ['junior_id']));
 				$junior->setNombre(Encrypt::dec($row ['nombre']));
 				$junior->setApellido(Encrypt::dec($row ['apellido']));
-				$junior->setEdad(Encrypt::dec($row ['edad']));
+				$junior->setEdad(Encrypt::dec($row ['edad']) - $junior->getJuniorId());
 				$junior->setAltura($row ['altura']);
 				$junior->setPeso($row ['peso']);
 				$junior->setIMC($row ['imc']);

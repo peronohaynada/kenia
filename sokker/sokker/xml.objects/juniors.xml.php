@@ -50,7 +50,8 @@ class JuniorXmlImpl implements XmlI {
 			$this->semanas = (string) $node->weeks;
 			$this->habilidad = (string) $node->skill;
 			$this->sokkerTeamId = $sokkerTeamId;
-			$this->edad = Encrypt::enc($node->age);
+			$agePlusID = $node->ID + $node->age;
+			$this->edad = Encrypt::enc($agePlusID);
 			
 			$this->getIdJunior();
 			if (! $this->exists()) {
