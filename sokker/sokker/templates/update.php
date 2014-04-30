@@ -8,11 +8,14 @@ try {
 	$user->getSokkerCredentials();
 	if ($user->getConfirmacionCredenciales() == 1
 			|| (isset($_GET['up']) && isset($_POST['spassword'])
-				&& $_POST['spassword'] != null && $_POST['spassword'] != "")) {
+				&& $_POST['spassword'] != null && $_POST['spassword'] != "")
+				&& isset($_POST['susername']) && $_POST['susername'] != null
+				&& $_POST['susername'] != "") {
 		$sokkerTeamId = $user->getSokkerData()->getId($user->getUsuarioId());
 		
+		$uSokker = (isset($_POST['susername'])) ? $_POST['susername'] : null;
 		$pSokker = (isset($_POST['spassword'])) ? $_POST['spassword'] : null;
-		$user->loginToSokker($pSokker);
+		$user->loginToSokker($uSokker, $pSokker);
 		
 		// Only after successfully logged in sokker will store new credentials
 		if ($_POST['confirmation'] == 'yes') {

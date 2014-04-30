@@ -117,11 +117,12 @@ class Usuario {
 		VDSokker::descargaXML($this->sokkerId, $dbId);
 	}
 	
-	public function loginToSokker($pSokker = null) {
-		if ($this->getConfirmacionCredenciales() && !isset($pSokker)) {
+	public function loginToSokker($uSokker = null, $pSokker = null) {
+		if ($this->getConfirmacionCredenciales() && !isset($pSokker) && !isset($uSokker)) {
+			$uSokker = $this->sokkerData->getUSokker();
 			$pSokker = $this->sokkerData->getPSokker();
 		}
-		$this->sokkerId = VDSokker::loginToSokker($this->sokkerData->getUSokker(), $pSokker);
+		$this->sokkerId = VDSokker::loginToSokker($uSokker, $pSokker);
 	}
 
 	private function exists($usuario) {
