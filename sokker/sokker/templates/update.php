@@ -20,7 +20,7 @@ try {
 		// Only after successfully logged in sokker will store new credentials
 		if ($_POST['confirmation'] == 'yes') {
 			$user->setConfirmacionCredenciales(1);
-			$user->getSokkerData()->updatePSokker($_POST['spassword']);
+			$user->getSokkerData()->updateCredentialsSokker($_POST['susername'], $_POST['spassword']);
 		}
 	
 		DBUtil::deleteJuniorsNotInSchool($sokkerTeamId);

@@ -33,15 +33,17 @@ class XUsuarioSokkerTeam {
 		$query = "INSERT INTO x_usuario_sokker_team (sokker_team_id, usuario_sokker, contrasena_sokker, usuario_id) VALUES (:sokker_team_id, :usuario_sokker, :contrasena_sokker, :usuario_id)";
 		if ($confirma) {
 			$this->pSokker = Encrypt::enc($this->pSokker);
+			$this->uSokker = Encrypt::enc($this->uSokker);
 		}
 		else {
 			$this->pSokker = null;
+			$this->uSokker = null;
 		}
 		$params = array();
 		$lastId = - 1;
 		
 		$params[":sokker_team_id"] = $sokkerId;
-		$params[":usuario_sokker"] = Encrypt::enc($this->uSokker);
+		$params[":usuario_sokker"] = $this->uSokker;
 		$params[":contrasena_sokker"] = $this->pSokker;
 		$params[":usuario_id"] = $usuarioId;
 		
@@ -135,13 +137,16 @@ class XUsuarioSokkerTeam {
 		$this->pSokker = $pSokker;
 	}
 	
-	public function updatePSokker($pSokker) {
-		$query = "UPDATE x_usuario_sokker_team SET contrasena_sokker=:contrasena_sokker where id=:id";
+	public function updateCredentialsSokker($uSokker, $pSokker) {
+		$query = "UPDATE x_usuario_sokker_team SET usuario_sokker=:usuario_sokker AND contrasena_sokker=:contrasena_sokker where id=:id";
 		$params = array();
 		$params[':contrasena_sokker'] = Encrypt::enc($pSokker);
+		$params[':usuario_sokker'] = Encrypt::enc($uSokker);
 		$params[':id'] = $this->id;
 		
 		DBUtil::update($query, $params);
+		$this->uSokker = $uSokker;
+		$this->pSokker = $pSokker;
 	}
 	
 	public function getPSokker() {
