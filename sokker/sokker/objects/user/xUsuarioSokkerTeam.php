@@ -138,11 +138,13 @@ class XUsuarioSokkerTeam {
 	}
 	
 	public function updateCredentialsSokker($uSokker, $pSokker) {
-		$query = "UPDATE x_usuario_sokker_team SET usuario_sokker=:usuario_sokker AND contrasena_sokker=:contrasena_sokker where id=:id";
+		echo "$uSokker - $pSokker";
+		$query = "UPDATE x_usuario_sokker_team SET usuario_sokker=:usuario_sokker, contrasena_sokker=:contrasena_sokker where id=:id";
 		$params = array();
-		$params[':contrasena_sokker'] = Encrypt::enc($pSokker);
 		$params[':usuario_sokker'] = Encrypt::enc($uSokker);
+		$params[':contrasena_sokker'] = Encrypt::enc($pSokker);
 		$params[':id'] = $this->id;
+		echo $this->id;
 		
 		DBUtil::update($query, $params);
 		$this->uSokker = $uSokker;
